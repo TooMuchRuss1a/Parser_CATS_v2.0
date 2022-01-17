@@ -7,6 +7,7 @@ st.set_page_config(page_title="CatsParser_PIE",
                    page_icon=":rocket:",
                    # layout= "wide"
                    )
+st.title("Б9121-09.03.03пиэ")
 
 with st.spinner('Работаем...'):
 
@@ -123,8 +124,6 @@ with st.spinner('Работаем...'):
             """
     st.markdown(hide_menu_style, unsafe_allow_html=True)
 #####################################################
-
-    st.title("Б9121-09.03.03пиэ")
 
     df = pd.DataFrame(
         DATA,
