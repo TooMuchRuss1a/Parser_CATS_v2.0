@@ -7,6 +7,7 @@ st.set_page_config(page_title="CatsParser_PIE",
                    page_icon=":rocket:",
                    # layout= "wide"
                    )
+
 st.title("Б9121-09.03.03пиэ")
 
 with st.spinner('Работаем...'):
@@ -84,6 +85,12 @@ with st.spinner('Работаем...'):
 "Янович Яков Валерьевич"
 ]
 
+    gsheetid = "1FiFjESIA7lY3zSY65wHnY-7BdAVhQoIEaDX7N_ycV-g"
+    sheet_name = "%D0%919121-09.03.03%D0%BF%D0%B8%D1%8D"
+    gsheet_url = "https://docs.google.com/spreadsheets/d/{}/gviz/tq?tqx=out:csv&sheet={}".format(gsheetid, sheet_name)
+    sheet = pd.read_csv(gsheet_url)
+    sheet = sheet[['Unnamed: 18']]
+
     name = (re.findall(r'(?<=n: ")(.*)(?=", fl)',f))
     score = (re.findall(r'(?<=ts: )(.*)(?=, ttm:)',f))
     nameclear = []
@@ -93,7 +100,15 @@ with st.spinner('Работаем...'):
     RATING = []
     DATA = []
     ID = []
+    ZACHET = []
+    MARK = []
     k=0
+
+    for i in range(2, len(group)+2):
+        if (str(sheet.values[i]) == "[nan]") or ((str(int(sheet.values[i])) == "2")):
+            ZACHET.append("НЕЗАЧЕТ")
+        else:
+            ZACHET.append(str(int(sheet.values[i])))
 
     for i in range(0, len(group)):
         groupclear.append(re.sub(' ', '', group[i]))
@@ -112,7 +127,13 @@ with st.spinner('Работаем...'):
             SCORE.append("0")
 
     for i in range(0, len(NAME)):
-        DATA.append([RATING[i], NAME[i], SCORE[i]])
+        for k in range(0, len(group)):
+
+            if (re.sub(' ', '', group[k]) == re.sub(' ', '', NAME[i])):
+                MARK.append(ZACHET[k])
+
+    for i in range(0, len(NAME)):
+        DATA.append([RATING[i], NAME[i], SCORE[i], MARK[i]])
         ID.append(i+1)
 
 ######################################################
@@ -127,7 +148,7 @@ with st.spinner('Работаем...'):
 
     df = pd.DataFrame(
         DATA,
-        columns=['РЕЙТИНГ', 'ФИО', 'РЕШЕНО'],
+        columns=['РЕЙТИНГ', 'ФИО', 'РЕШЕНО', 'ОЦЕНКА'],
         index=ID
     )
 
